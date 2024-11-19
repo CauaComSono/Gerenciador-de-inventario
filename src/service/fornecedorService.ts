@@ -1,4 +1,10 @@
-import { Fornecedor } from '../components/fornecedor/fornecedorComponent';
+export type Fornecedor = {
+    id: number;
+    nome: string;
+    cnpj: string;
+    contato: string;
+    endereco: string;
+  };
 
 export const FornecedorService = {
     listFornecedores: async (): Promise<Fornecedor[]> => {
@@ -23,7 +29,8 @@ export const FornecedorService = {
             }),
         });
         if (!response.ok) {
-            throw new Error('Erro ao adicionar fornecedor');
+            const errorMessage = await response.json();
+            throw new Error(`Erro ao adicionar fornecedor: ${errorMessage.error}`);
         }
         return response.json();
     },
@@ -41,8 +48,10 @@ export const FornecedorService = {
                 endereco: fornecedor.endereco,
             }),
         });
+        
         if (!response.ok) {
-            throw new Error('Erro ao atualizar fornecedor');
+            const errorMessage = await response.json();
+            throw new Error(`Erro ao atualizar fornecedor: ${errorMessage.error}`);
         }
         return response.json();
     },
@@ -52,7 +61,8 @@ export const FornecedorService = {
             method: "DELETE",
         });
         if (!response.ok) {
-            throw new Error('Erro ao excluir fornecedor');
+            const errorMessage = await response.json();
+            throw new Error(`Erro ao excluir fornecedor: ${errorMessage.error}`);
         }
     },
 };
