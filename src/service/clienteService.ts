@@ -1,14 +1,21 @@
-import { Cliente } from '../components/cliente/clienteComponent';
+export type Cliente = {
+    id: number;
+    nome: string;
+    cpf_cnpj: string;
+    contato: string;
+    endereco: string;
+};
 
-export const ClienteService = {
+const ClienteService = {
     listClientes: async (): Promise<Cliente[]> => {
         const response = await fetch("http://localhost:8080/api/v1/cliente/get");
         if (!response.ok) {
-            throw new Error('Erro ao carregar clientes');
+            const errorMessage = await response.json();
+            throw new Error(`Erro ao carregar clientes: ${errorMessage.error}`);
         }
         return response.json();
     },
-    
+
     addCliente: async (cliente: Partial<Cliente>): Promise<Cliente> => {
         const response = await fetch("http://localhost:8080/api/v1/cliente/add", {
             method: "POST",
@@ -22,8 +29,10 @@ export const ClienteService = {
                 endereco: cliente.endereco,
             }),
         });
+
         if (!response.ok) {
-            throw new Error('Erro ao adicionar cliente');
+            const errorMessage = await response.json();
+            throw new Error(`Erro ao adicionar cliente: ${errorMessage.error}`);
         }
         return response.json();
     },
@@ -41,8 +50,10 @@ export const ClienteService = {
                 endereco: cliente.endereco,
             }),
         });
+
         if (!response.ok) {
-            throw new Error('Erro ao atualizar cliente');
+            const errorMessage = await response.json();
+            throw new Error(`Erro ao atualizar cliente: ${errorMessage.error}`);
         }
         return response.json();
     },
@@ -51,8 +62,11 @@ export const ClienteService = {
         const response = await fetch(`http://localhost:8080/api/v1/cliente/${id}`, {
             method: "DELETE",
         });
+
         if (!response.ok) {
-            throw new Error('Erro ao excluir cliente');
+            const errorMessage = await response.json();
+            throw new Error(`Erro ao excluir cliente: ${errorMessage.error}`);
         }
     },
 };
+export default ClienteService;
