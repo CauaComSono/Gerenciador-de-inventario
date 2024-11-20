@@ -1,20 +1,18 @@
-import * as React from "react";
-import { cn } from "@/lib/utils";
+import React from 'react';
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
-  options: { value: string; label: string }[];
+  onValueChange?: (value: string) => void;
+  className?: string;
 }
 
-const Select: React.FC<SelectProps> = ({ options, className, ...props }) => {
+export function Select({ onValueChange, className = '', ...props }: SelectProps) {
   return (
-    <select className={cn("border border-gray-300 rounded-md p-2", className)} {...props}>
-      {options.map(option => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
-      ))}
+    <select
+      {...props}
+      className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
+      onChange={(e) => onValueChange?.(e.target.value)}
+    >
+      {props.children}
     </select>
   );
-};
-
-export default Select;
+}
